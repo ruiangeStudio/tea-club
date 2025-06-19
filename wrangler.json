@@ -1,0 +1,12 @@
+{
+  "name": "teahouse-club",
+  "compatibility_date": "2023-08-01",
+  "workers_dev": true,
+  "site": {
+    "bucket": "./",
+    "entry-point": "workers-site"
+  },
+  "build": {
+    "command": ""
+  }
+}
