@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>茶馆俱乐部 - 炫酷主页</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6e45e2;
+            --secondary-color: #88d3ce;
+            --dark-color: #1a1a2e;
+            --light-color: #f8f9fa;
+            --accent-color: #ff4d4d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            overflow-x: hidden;
+        }
+
+        /* 粒子背景 */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* 导航栏 */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+            background-color: rgba(26, 26, 46, 0.9);
+            padding: 15px 10%;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--light-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo span {
+            color: var(--accent-color);
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: var(--light-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--accent-color);
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(110, 69, 226, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(110, 69, 226, 0.6);
+        }
+
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        /* 英雄区域 */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 10%;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero h1 span {
+            color: var(--accent-color);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero h1 span::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 15px;
+            background: rgba(255, 77, 77, 0.3);
+            bottom: 10px;
+            left: 0;
+            z-index: -1;
+            border-radius: 10px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .hero-image {
+            position: absolute;
+            right: 10%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 50px rgba(110, 69, 226, 0.6);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero-image img {
+            width: 90%;
+            height: 90%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(-50%) translateX(0); }
+            50% { transform: translateY(-50%) translateX(-20px); }
+            100% { transform: translateY(-50%) translateX(0); }
+        }
+
+        /* 关于我们 */
+        .section {
+            padding: 100px 10%;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 36px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            width: 70px;
+            height: 3px;
+            background: var(--accent-color);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-text h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        .about-stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 40px;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        .about-image {
+            flex: 1;
+            position: relative;
+        }
+
+        .about-image img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .about-image::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 5px solid var(--accent-color);
+            border-radius: 10px;
+            top: 20px;
+            left: 20px;
+            z-index: -1;
+        }
+
+        /* 活动部分 */
+        .events {
+            background-color: rgba(26, 26, 46, 0.8);
+            position: relative;
+        }
+
+        .events::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80') no-repeat center center/cover;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .event-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .event-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .event-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .event-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .event-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .event-card:hover .event-image img {
+            transform: scale(1.1);
+        }
+
+        .event-info {
+            padding: 20px;
+        }
+
+        .event-date {
+            display: inline-block;
+            background: var(--accent-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .event-info h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .event-info p {
+            opacity: 0.8;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .event-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .event-location, .event-time {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* 会员部分 */
+        .membership {
+            text-align: center;
+        }
+
+        .membership-plans {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .plan-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 40px 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .plan-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--primary-color);
+        }
+
+        .plan-card.popular::before {
+            background: var(--accent-color);
+        }
+
+        .plan-card.popular {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .plan-card.popular .plan-price {
+            color: var(--accent-color);
+        }
+
+        .plan-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .plan-name {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .plan-price {
+            font-size: 40px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .plan-price span {
+            font-size: 16px;
+            font-weight: normal;
+            opacity: 0.8;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .plan-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .popular-tag {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--accent-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* 联系部分 */
+        .contact {
+            background: linear-gradient(135deg, var(--dark-color), #16213e);
+        }
+
+        .contact-container {
+            display: flex;
+            gap: 50px;
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .contact-info h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .contact-info p {
+            margin-bottom: 30px;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        .contact-details {
+            list-style: none;
+        }
+
+        .contact-details li {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--accent-color);
+        }
+
+        .contact-form {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* 页脚 */
+        footer {
+            background-color: #0f0f1a;
+            padding: 50px 10% 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 2px;
+            background: var(--accent-color);
+            bottom: 0;
+            left: 0;
+        }
+
+        .footer-column p {
+            opacity: 0.8;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--accent-color);
+            transform: translateY(-5px);
+        }
+
+        .quick-links {
+            list-style: none;
+        }
+
+        .quick-links li {
+            margin-bottom: 10px;
+        }
+
+        .quick-links a {
+            color: var(--light-color);
+            text-decoration: none;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quick-links a:hover {
+            opacity: 1;
+            color: var(--accent-color);
+            transform: translateX(5px);
+        }
+
+        .quick-links i {
+            font-size: 12px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
+            font-size: 14px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1200px) {
+            .hero-image {
+                width: 400px;
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding-top: 150px;
+                padding-bottom: 100px;
+            }
+
+            .hero-content {
+                max-width: 100%;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-image {
+                position: relative;
+                right: auto;
+                top: auto;
+                transform: none;
+                margin: 50px auto 0;
+            }
+
+            .about-content {
+                flex-direction: column;
+            }
+
+            .contact-container {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background: var(--dark-color);
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.5s ease;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .nav-links li {
+                margin: 15px 0;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .hero-image {
+                width: 300px;
+                height: 300px;
+            }
+
+            .section-title h2 {
+                font-size: 30px;
+            }
+
+            .about-stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .hero-image {
+                width: 250px;
+                height: 250px;
+            }
+
+            .plan-card.popular {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- 粒子背景 -->
+<div id="particles-js"></div>
+
+<!-- 导航栏 -->
+<header id="header">
+    <a href="#" class="logo"><i class="fas fa-fire"></i>茶馆<span>俱乐部</span></a>
+    <div class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </div>
+    <ul class="nav-links" id="navLinks">
+        <li><a href="#home">首页</a></li>
+        <li><a href="#about">关于我们</a></li>
+        <li><a href="#events">活动</a></li>
+        <li><a href="#membership">会员</a></li>
+        <li><a href="#contact">联系我们</a></li>
+        <li><a href="#" class="cta-button">加入我们</a></li>
+    </ul>
+</header>
+
+<!-- 英雄区域 -->
+<section class="hero" id="home">
+    <div class="hero-content">
+        <h1>加入<span>茶馆俱乐部</span> 体验非凡人生</h1>
+        <p>茶馆俱乐部是一个充满活力与创意的社区，我们致力于为会员提供最优质的活动体验和社交平台。加入我们，开启您的精彩旅程！</p>
+        <div class="hero-buttons">
+            <a href="#" class="cta-button">立即加入</a>
+            <a href="#" class="cta-button" style="background: transparent; border: 2px solid white; box-shadow: none;">了解更多</a>
+        </div>
+    </div>
+    <div class="hero-image">
+        <img src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="俱乐部活动">
+    </div>
+</section>
+
+<!-- 关于我们 -->
+<section class="section" id="about">
+    <div class="section-title">
+        <h2>关于我们</h2>
+    </div>
+    <div class="about-content">
+        <div class="about-text">
+            <h3>我们是谁？</h3>
+            <p>茶馆俱乐部成立于2010年，是一个充满活力的社交与活动组织。我们的使命是创造一个包容、创新的社区，让每个人都能找到属于自己的位置。</p>
+            <p>从最初的小型聚会到如今拥有数千名会员的大型组织，我们始终坚持为会员提供高质量的活动体验和社交机会。</p>
+            <div class="about-stats">
+                <div class="stat-item">
+                    <div class="stat-number">5000+</div>
+                    <div class="stat-label">活跃会员</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">200+</div>
+                    <div class="stat-label">年度活动</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">10</div>
+                    <div class="stat-label">城市分会</div>
+                </div>
+            </div>
+        </div>
+        <div class="about-image">
+            <img src="https://images.unsplash.com/photo-1541178735493-479c1a27ed24?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80" alt="关于茶馆俱乐部">
+        </div>
+    </div>
+</section>
+
+<!-- 活动部分 -->
+<section class="section events" id="events">
+    <div class="section-title">
+        <h2>精彩活动</h2>
+    </div>
+    <div class="event-cards">
+        <div class="event-card">
+            <div class="event-image">
+                <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="户外探险">
+            </div>
+            <div class="event-info">
+                <span class="event-date">6月15日</span>
+                <h3>户外探险之旅</h3>
+                <p>加入我们的周末户外探险活动，探索自然美景，挑战自我极限，结识志同道合的朋友。</p>
+                <div class="event-meta">
+                    <div class="event-location"><i class="fas fa-map-marker-alt"></i> 国家森林公园</div>
+                    <div class="event-time"><i class="far fa-clock"></i> 全天活动</div>
+                </div>
+            </div>
+        </div>
+        <div class="event-card">
+            <div class="event-image">
+                <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="音乐节">
+            </div>
+            <div class="event-info">
+                <span class="event-date">7月22-24日</span>
+                <h3>茶馆夏季音乐节</h3>
+                <p>一年一度的音乐盛事，汇集国内外知名音乐人和新兴艺术家，带给你难忘的音乐体验。</p>
+                <div class="event-meta">
+                    <div class="event-location"><i class="fas fa-map-marker-alt"></i> 城市中央公园</div>
+                    <div class="event-time"><i class="far fa-clock"></i> 3天活动</div>
+                </div>
+            </div>
+        </div>
+        <div class="event-card">
+            <div class="event-image">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="创意工作坊">
+            </div>
+            <div class="event-info">
+                <span class="event-date">每周三</span>
+                <h3>创意工作坊</h3>
+                <p>从绘画到陶艺，从摄影到编程，每周不同的创意主题，激发你的创造力和艺术潜能。</p>
+                <div class="event-meta">
+                    <div class="event-location"><i class="fas fa-map-marker-alt"></i> 俱乐部创意空间</div>
+                    <div class="event-time"><i class="far fa-clock"></i> 19:00-21:00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 会员部分 -->
+<section class="section membership" id="membership">
+    <div class="section-title">
+        <h2>会员计划</h2>
+    </div>
+    <div class="membership-plans">
+        <div class="plan-card">
+            <div class="plan-name">基础会员</div>
+            <div class="plan-price">¥199<span>/月</span></div>
+            <ul class="plan-features">
+                <li>参加常规活动</li>
+                <li>俱乐部通讯订阅</li>
+                <li>会员专属折扣</li>
+                <li>每月2次特别活动</li>
+                <li>基础社交网络访问</li>
+            </ul>
+            <a href="#" class="cta-button">立即加入</a>
+        </div>
+        <div class="plan-card popular">
+            <div class="popular-tag">最受欢迎</div>
+            <div class="plan-name">高级会员</div>
+            <div class="plan-price">¥399<span>/月</span></div>
+            <ul class="plan-features">
+                <li>所有基础会员权益</li>
+                <li>无限制参加所有活动</li>
+                <li>优先活动注册</li>
+                <li>专属社交活动</li>
+                <li>高级社交网络访问</li>
+                <li>每月1次VIP体验</li>
+            </ul>
+            <a href="#" class="cta-button">立即加入</a>
+        </div>
+        <div class="plan-card">
+            <div class="plan-name">企业会员</div>
+            <div class="plan-price">¥999<span>/月</span></div>
+            <ul class="plan-features">
+                <li>5个高级会员名额</li>
+                <li>企业品牌曝光机会</li>
+                <li>定制企业活动</li>
+                <li>专属客户经理</li>
+                <li>企业社交网络</li>
+                <li>季度战略会议</li>
+            </ul>
+            <a href="#" class="cta-button">联系我们</a>
+        </div>
+    </div>
+</section>
+
+<!-- 联系部分 -->
+<section class="section contact" id="contact">
+    <div class="section-title">
+        <h2>联系我们</h2>
+    </div>
+    <div class="contact-container">
+        <div class="contact-info">
+            <h3>与我们取得联系</h3>
+            <p>无论您有任何问题、建议还是想了解更多关于茶馆俱乐部的信息，我们都非常乐意听取您的意见并为您提供帮助。</p>
+            <ul class="contact-details">
+                <li>
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div>
+                        <h4>地址</h4>
+                        <p>北京市朝阳区光华路8号茶馆大厦15层</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div>
+                        <h4>电话</h4>
+                        <p>+86 10 8888 8888</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div>
+                        <h4>邮箱</h4>
+                        <p>info@auroraclub.com</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="contact-form">
+            <form>
+                <div class="form-group">
+                    <label for="name">您的姓名</label>
+                    <input type="text" id="name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">电子邮箱</label>
+                    <input type="email" id="email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject">主题</label>
+                    <input type="text" id="subject" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">留言内容</label>
+                    <textarea id="message" class="form-control" required></textarea>
+                </div>
+                <button type="submit" class="cta-button" style="width: 100%;">发送留言</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- 页脚 -->
+<footer>
+    <div class="footer-content">
+        <div class="footer-column">
+            <h3>关于茶馆</h3>
+            <p>茶馆俱乐部是一个充满活力的社区，致力于为会员提供优质的活动体验和社交平台。</p>
+            <div class="social-links">
+                <a href="#" class="social-link"><i class="fab fa-weixin"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-weibo"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-douyin"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+        <div class="footer-column">
+            <h3>快速链接</h3>
+            <ul class="quick-links">
+                <li><a href="#home"><i class="fas fa-chevron-right"></i> 首页</a></li>
+                <li><a href="#about"><i class="fas fa-chevron-right"></i> 关于我们</a></li>
+                <li><a href="#events"><i class="fas fa-chevron-right"></i> 活动</a></li>
+                <li><a href="#membership"><i class="fas fa-chevron-right"></i> 会员计划</a></li>
+                <li><a href="#contact"><i class="fas fa-chevron-right"></i> 联系我们</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3>活动分类</h3>
+            <ul class="quick-links">
+                <li><a href="#"><i class="fas fa-chevron-right"></i> 户外探险</a></li>
+                <li><a href="#"><i class="fas fa-chevron-right"></i> 文化艺术</a></li>
+                <li><a href="#"><i class="fas fa-chevron-right"></i> 科技创业</a></li>
+                <li><a href="#"><i class="fas fa-chevron-right"></i> 社交聚会</a></li>
+                <li><a href="#"><i class="fas fa-chevron-right"></i> 健康生活</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3>订阅通讯</h3>
+            <p>订阅我们的电子通讯，获取最新活动信息和独家优惠。</p>
+            <form>
+                <div class="form-group">
+                    <input type="email" class="form-control" placeholder="您的邮箱地址" required>
+                </div>
+                <button type="submit" class="cta-button" style="width: 100%;">订阅</button>
+            </form>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2023 茶馆俱乐部. 保留所有权利.</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script>
+    // 导航栏滚动效果
+    window.addEventListener('scroll', function() {
+        const header = document.getElementById('header');
+        if (window.scrollY > 100) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    // 移动端菜单切换
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    menuToggle.addEventListener('click', function() {
+        navLinks.classList.toggle('active');
+    });
+
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            if (navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+            }
+
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    // 粒子效果
+    particlesJS('particles-js', {
+        "particles": {
+            "number": {
+                "value": 80,
+                "density": {
+                    "enable": true,
+                    "value_area": 800
+                }
+            },
+            "color": {
+                "value": "#6e45e2"
+            },
+            "shape": {
+                "type": "circle",
+                "stroke": {
+                    "width": 0,
+                    "color": "#000000"
+                },
+                "polygon": {
+                    "nb_sides": 5
+                }
+            },
+            "opacity": {
+                "value": 0.5,
+                "random": false,
+                "anim": {
+                    "enable": false,
+                    "speed": 1,
+                    "opacity_min": 0.1,
+                    "sync": false
+                }
+            },
+            "size": {
+                "value": 3,
+                "random": true,
+                "anim": {
+                    "enable": false,
+                    "speed": 40,
+                    "size_min": 0.1,
+                    "sync": false
+                }
+            },
+            "line_linked": {
+                "enable": true,
+                "distance": 150,
+                "color": "#6e45e2",
+                "opacity": 0.4,
+                "width": 1
+            },
+            "move": {
+                "enable": true,
+                "speed": 2,
+                "direction": "none",
+                "random": false,
+                "straight": false,
+                "out_mode": "out",
+                "bounce": false,
+                "attract": {
+                    "enable": false,
+                    "rotateX": 600,
+                    "rotateY": 1200
+                }
+            }
+        },
+        "interactivity": {
+            "detect_on": "canvas",
+            "events": {
+                "onhover": {
+                    "enable": true,
+                    "mode": "grab"
+                },
+                "onclick": {
+                    "enable": true,
+                    "mode": "push"
+                },
+                "resize": true
+            },
+            "modes": {
+                "grab": {
+                    "distance": 140,
+                    "line_linked": {
+                        "opacity": 1
+                    }
+                },
+                "bubble": {
+                    "distance": 400,
+                    "size": 40,
+                    "duration": 2,
+                    "opacity": 8,
+                    "speed": 3
+                },
+                "repulse": {
+                    "distance": 200,
+                    "duration": 0.4
+                },
+                "push": {
+                    "particles_nb": 4
+                },
+                "remove": {
+                    "particles_nb": 2
+                }
+            }
+        },
+        "retina_detect": true
+    });
+
+    // 动画效果
+    const animateOnScroll = function() {
+        const elements = document.querySelectorAll('.hero-content, .about-content, .event-card, .plan-card, .contact-container');
+
+        elements.forEach(element => {
+            const elementPosition = element.getBoundingClientRect().top;
+            const screenPosition = window.innerHeight / 1.3;
+
+            if (elementPosition < screenPosition) {
+                element.style.opacity = '1';
+                element.style.transform = 'translateY(0)';
+            }
+        });
+    };
+
+    // 设置初始状态
+    document.querySelectorAll('.hero-content, .about-content, .event-card, .plan-card, .contact-container').forEach(element => {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(30px)';
+        element.style.transition = 'all 0.6s ease';
+    });
+
+    window.addEventListener('scroll', animateOnScroll);
+    window.addEventListener('load', animateOnScroll);
+</script>
+</body>
+</html>
