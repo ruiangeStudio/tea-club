@@ -1,0 +1,12 @@
+{
+  "name": "teahouse-club",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "wrangler dev",
+    "deploy": "wrangler publish"
+  },
+  "devDependencies": {
+    "@cloudflare/wrangler": "^1.19.0"
+  }
+}
